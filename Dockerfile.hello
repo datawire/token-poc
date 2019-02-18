@@ -1,0 +1,4 @@
+FROM golang:1.11.4-alpine3.8
+WORKDIR /app
+COPY hello.go .
+ENTRYPOINT ["go", "run", "hello.go"]
