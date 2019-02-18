@@ -8,6 +8,7 @@
    
    ```
    kubectl apply -f ambassador-pro.yaml
+   kubectl apply -f ambassador-pro-auth.yaml
    kubectl apply -f ambassador-service.yaml
    kubectl apply -f authenticate.yaml
    kubectl apply -f hello.yaml
