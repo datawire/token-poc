@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: authenticate
-        image: quay.io/datawire/token-poc-auth:eb29e26-dirty
+        image: quay.io/datawire/token-poc-auth:aca754b
         env:
         - name: TIMEOUT
           value: "30s"
