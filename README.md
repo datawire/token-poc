@@ -1,5 +1,7 @@
 # Token POC
 
+This POC shows a simple demonstration of forthcoming support for API keys in Ambassador Pro. In this demo, long-lived API keys are sent by the client. These API keys are then exchanged for short-lived API keys. These short-lived API keys are cached for performance. This enables Ambassador Pro users to easily write business logic around token validation and invalidation without impacting scalability and performance.
+
 ## Quick start
 
 1. Create the `ambassador-pro-registry-credentials` secret in your cluster, if you haven't done so already.
@@ -17,7 +19,7 @@
 
 4. Get the IP address of your LoadBalancer: `kubectl get svc ambassador`
 
-5. `curl` to the load balancer to test different variables:
+5. `curl` to the load balancer with a simulated API key, e.g.,
 
    ```
    curl $IP/hello/ -H "Authorization: foo"
@@ -25,25 +27,24 @@
    curl $IP/hello/ -H "Authorization: baz"
    ```
 
-   Note that the supplied authorization token is intercepted and
-   replaced by the token supplied by the example authorization.go
-   service (it should be "Yay!").
+   The supplied authorization token is intercepted and replaced by a "short-lived API key" (currently hard-coded to "Yay!").
 
 ## Behind the scenes
 
-* The token-plugin that is part of the ambassador-pro sidecar
-  delegates to the custom authenticate.go service.
+* The caching & authentication management functionality is encapsulated in `token-plugin` as part of Ambassador Pro.
 
-* The custom service is supplied with the original token, and
+* `token-plugin` delegates to a custom `authenticate.go` service that contains business logic. A sample `authenticate.go` service is included in this repository.
+
+* The custom `authenticate.go` service is supplied with the original token, and
   therefore has the option to check for revocation, etc.
 
 * If the original token is still considered valid, it returns a
   short-lived token and a timeout.
 
-* The token-plugin caches the short-lived token for the duration of
+* `token-plugin` caches the short-lived token for the duration of
   the timeout.
 
-* This design is intended to allow the authenticate.go service to
+* This design is intended to allow the `authenticate.go` service to
   capture business logic around token invalidation and the like
   without impacting critical path authentication performance. The
   sample implementation includes a 250ms simulated processing delay
