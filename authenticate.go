@@ -37,7 +37,7 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 
 	var body = make(map[string]interface{})
-	body["Token"] = "Yay!"
+	body["Token"] = fmt.Sprintf("Yay! %s", time.Now().Format("2006-01-02 15:04:05 MST"))
 	body["Timeout"] = TIMEOUT.Seconds()
 
 	b, err := json.MarshalIndent(body, "", "  ")

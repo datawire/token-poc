@@ -1,0 +1,25 @@
+---
+apiVersion: getambassador.io/v1beta1
+kind: Middleware
+metadata:
+  name: token-plugin # how to refer to the plugin in the Policy CRD
+  namespace: default
+spec:
+  Plugin:
+    name: token-plugin # The plugin's `.so` file's base name
+---
+apiVersion: getambassador.io/v1beta1
+kind: Policy
+metadata:
+  name: hello-policy
+  namespace: default
+spec:
+  # everything defaults to private; you can create rules to make stuff
+  # public, and you can create rules to require additional scopes
+  # which will be automatically checked
+  rules:
+  - host: "*"
+    path: /hello/*
+    public: false # must be false if using a middleware
+    middleware:
+      name: token-plugin

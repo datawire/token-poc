@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authenticate
+spec:
+  type: ClusterIP
+  ports:
+   - port: 80
+     targetPort: 8080
+  selector:
+    app: authenticate
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authenticate-deployment
+  labels:
+    app: authenticate
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authenticate
+  template:
+    metadata:
+      labels:
+        app: authenticate
+    spec:
+      containers:
+      - name: authenticate
+        image: ${AUTHENTICATE_IMAGE}
+        env:
+        - name: TIMEOUT
+          value: "30s"
+        - name: OVERHEAD
+          value: "250ms"
