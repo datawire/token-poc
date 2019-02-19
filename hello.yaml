@@ -37,4 +37,4 @@ spec:
     spec:
       containers:
       - name: hello
-        image: quay.io/datawire/token-poc-hello:aca754b
+        image: quay.io/datawire/token-poc-hello:b1ead80-dirty
